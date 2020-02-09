@@ -1,5 +1,5 @@
-6fccea9360cff729f6d0ce7bbb6457fc *DESCRIPTION
-607656ed37e8ed396524b2def736cfdd *NAMESPACE
+61280c8ce1b870af290ce600ed29ec05 *DESCRIPTION
+0e26788d9cb66166cdc08e06a18a3b43 *NAMESPACE
 755737be961e260ff3a3d52b5790ab10 *NEWS.md
 307f94aa13ee6d4791a3f69504e7ec34 *R/fusion.R
 5971715767d7bb708ef2e9e869f9116f *R/fusionData.R
@@ -7,7 +7,7 @@
 9fe994796be4275c3edf1124cfff253c *R/fusionINLA.R
 c92e03863e85cf7a72ce30778a4934b8 *R/fusionPlot.R
 9610d97e6493a09f863dc26b47dd76d1 *R/fusionPred.R
-0033d78a8aba915c0b810c6d1c7d9d42 *R/fusionSimulate.R
+9684938b54fcb8299096c8e736a97700 *R/fusionSimulate.R
 90e8c9ba12ee7ceb0c43a4c96f903803 *R/fusionStan.R
 f123308c563df39794a8acc893204451 *R/fusionSummary.R
 e6eda9bdc168452ee99c2af715af2685 *R/help.R
@@ -34,7 +34,7 @@ d17ebbc431bfc07e3ec08c980947faa1 *inst/doc/spatialfusion_vignette.pdf.asis
 69710624122d9f158cdacfc26a95e6f0 *man/plot.Rd
 6d654eed1e69e43b01e0e41ab87ba6f6 *man/ppdata.Rd
 919a3490751c3b8faa6eb59d27148e90 *man/predict.Rd
-4bb613752a3a4c087d0eb944aa0a1556 *man/spatialfusion-package.Rd
+639196fddd36be471d4fd7097ef82ddc *man/spatialfusion-package.Rd
 eaac2fc87c67f5b7e7575ee4c1a05aee *man/summary.Rd
 541d8f17995f5121a0f642284887c9ca *tests/testthat/test.R
 f53dfc35661da6cbf515b4e31584fa6d *vignettes/spatialfusion_vignette.Rmd
