@@ -61,6 +61,17 @@ lattice_data <- sp::SpatialPolygonsDataFrame(dat$poly,
                     data.frame(outcome = dat$data$Y_area[[1]],
                     cov.area = dat$data$X_area[,2]))
 
+dat_stan <- fusionData(geo.data = geo_data, geo.formula = outcome ~ cov.point,
+                lattice.data = lattice_data, lattice.formula = outcome ~ cov.area,
+                pp.data = dat$data$lgcp.coords[[1]], distributions = c("normal","poisson"),
+                method = "Stan")
+
+## S3 method for class 'dstan'
+mod_stan <- fusion(data = dat_stan, n.latent = 1, bans = 0, pp.offset = 1,
+                prior.phi = list(distr = "normal", pars = c(1, 10)))
+summary(mod_stan)
+}
+\dontrun{
 if (require("INLA", quietly = TRUE)) {
 dat_inla <- fusionData(geo.data = geo_data, geo.formula = outcome ~ cov.point,
                 lattice.data = lattice_data, lattice.formula = outcome ~ cov.area,
@@ -73,16 +84,6 @@ mod_inla <- fusion(data = dat_inla, n.latent = 1, bans = 0,
                 mesh.locs = dat_inla$locs_point, mesh.max.edge = c(0.5, 1))
 summary(mod_inla)
 }
-
-dat_stan <- fusionData(geo.data = geo_data, geo.formula = outcome ~ cov.point,
-                lattice.data = lattice_data, lattice.formula = outcome ~ cov.area,
-                pp.data = dat$data$lgcp.coords[[1]], distributions = c("normal","poisson"),
-                method = "Stan")
-
-## S3 method for class 'dstan'
-mod_stan <- fusion(data = dat_stan, n.latent = 1, bans = 0, pp.offset = 1,
-                prior.phi = list(distr = "normal", pars = c(1, 10)))
-summary(mod_stan)
 }}
 \keyword{models}
 

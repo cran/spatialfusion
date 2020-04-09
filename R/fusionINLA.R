@@ -7,6 +7,18 @@ fusion.dinla <- function(data, n.latent = 1, bans = 0, pp.offset, verbose = FALS
          call. = FALSE)
   }
 
+  # INLA:::inla.dynload.workaround()
+  # if (Sys.info()["sysname"] == "Linux") {
+  #   mkl = INLA::inla.getOption("mkl")
+  #   if (is.null(mkl))
+  #     mkl = FALSE
+  #   d = dirname(system.file(paste("bin/linux/", ifelse(.Machine$sizeof.pointer == 4, "32", "64"),  "bit/inla.", "run", sep = ""), package = "INLA"))
+  #   INLA::inla.setOption(inla.call = paste(d, "/inla.", if (mkl)
+  #     "mkl."
+  #     else "", "static", sep = ""))
+  #   INLA::inla.setOption(fmesher.call = paste(d, "/fmesher.static", sep = ""))
+  # }
+
   n.var <- data$n_point_var + data$n_area_var + data$n_pp_var
 
   # checks  -----------------------------------------------------------------
@@ -27,7 +39,7 @@ fusion.dinla <- function(data, n.latent = 1, bans = 0, pp.offset, verbose = FALS
   if (missing("mesh.locs")){
     stop("mesh.locs must be provided or loc.domain must be provided in the named list for mesh.args")
   } else {
-    if (!class(mesh.locs) %in% c("matrix", "SpatialPoints", "SpatialPointsDataFrame")) stop("mesh.locs must be a class of matrix, SpatialPoints or SpatialPointsDataFrame")
+    if (!any(class(mesh.locs) %in% c("matrix", "SpatialPoints", "SpatialPointsDataFrame"))) stop("mesh.locs must be a class of matrix, SpatialPoints or SpatialPointsDataFrame")
   }
 
   if (missing("mesh.args")) mesh.args <- NULL

@@ -164,11 +164,11 @@ dstdev <- function(x, sigma0, Psigma){
 getPriorLatentINLA <- function(model, priors, n_w){
   out <- c()
   # priors on Gaussian precision (only default)
-  g.indices <- which(model$.args$family == "normal")
+  g.indices <- which(model$.args$family == "gaussian")
   if (length(g.indices) > 0){
     for (g.index in g.indices){
-      out <- c(out, paste0("dgamma(x, ", model$all.hyper$family[[g.index]]$hyper$theta$param[1],
-                           ", ", model$all.hyper$family[[g.index]]$hyper$theta$param[2], ")"))
+      out <- c(out, paste0("dgamma(x, ", model$all.hyper$family[[g.index]]$hyper$theta1$param[1],
+                           ", ", model$all.hyper$family[[g.index]]$hyper$theta1$param[2], ")"))
     }
   }
 

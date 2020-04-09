@@ -71,9 +71,9 @@ Craig Wang
 
 \examples{
 ## example based on simulated data
-\donttest{
+\dontrun{
 if (require("INLA", quietly = TRUE)) {
-dat <- fusionSimulate(n.point = 20, n.area = 10, n.grid = 2,
+dat <- fusionSimulate(n.point = 50, n.area = 20, n.grid = 4,
                psill = 1, phi = 1, nugget = 0, tau.sq = 0.5,
                point.beta = list(rbind(1,5)),
                area.beta = list(rbind(-1, 0.5)),

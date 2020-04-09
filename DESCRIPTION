@@ -6,8 +6,8 @@ Type: Package
 VignetteBuilder: R.rsp
 Title: Multivariate Analysis of Spatial Data Using a Unifying Spatial
         Fusion Framework
-Version: 0.6-1
-Date: 2020-02-08
+Version: 0.6-2
+Date: 2020-03-22
 Authors@R: c(
     person("Craig", "Wang", email = "craig.wang@math.uzh.ch", role = c("aut","cre"),comment = c(ORCID = "0000-0003-1804-2463")),
     person("Reinhard", "Furrer", email = "reinhard.furrer@math.uzh.ch", role = "ctb",comment = c(ORCID = "0000-0002-6319-2332")))
@@ -17,8 +17,8 @@ License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: TRUE
 NeedsCompilation: no
-Packaged: 2020-02-08 13:15:58 UTC; crwang
+Packaged: 2020-04-09 11:59:43 UTC; crwang
 Author: Craig Wang [aut, cre] (<https://orcid.org/0000-0003-1804-2463>),
   Reinhard Furrer [ctb] (<https://orcid.org/0000-0002-6319-2332>)
 Repository: CRAN
-Date/Publication: 2020-02-09 19:20:05 UTC
+Date/Publication: 2020-04-09 14:20:02 UTC

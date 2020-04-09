@@ -116,7 +116,7 @@ dat <- fusionData(dataGeo, lungfunction ~ covariate,
            dataPP, distribution = c("normal","poisson"),
            domain = dataDomain,
            method = "INLA")
-\donttest{
+\dontrun{
 if (require("INLA", quietly = TRUE)) {
 ## fit a spatial fusion model on the prepared data
 ## pp.offset = 400 was chosen based on simulation parameters
