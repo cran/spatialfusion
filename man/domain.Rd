@@ -8,6 +8,6 @@ This dataset gives the municipality (gemeinde) map for the Canton of Zurich in S
 \usage{dataDomain}
 \format{A \code{SpatialPolygons} object containing 162 \code{Polygons}.}
 \references{
-\href{https://statistik.zh.ch/internet/justiz_inneres/statistik/de/daten/Raeumliche_Daten/Basiskarten.html}{https://statistik.zh.ch/} (Visited: 30/05/2019)
+\href{https://www.zh.ch/de/politik-staat/statistik-daten/datenkatalog.html#/details/151@statistisches-amt-kanton-zuerich}{https://www.zh.ch/de/politik-staat/statistik-daten.html} (Visited: 26/06/2021)
 }
 \keyword{datasets}

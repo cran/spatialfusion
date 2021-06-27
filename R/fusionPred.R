@@ -26,7 +26,7 @@
 predictINLA <- function(fusion.model, new.locs, type){
 
   if (!requireNamespace("INLA", quietly = TRUE)) {
-    stop("Package 'INLA' needed for this function to work. Please install it first, visit http://www.r-inla.org/download",
+    stop("Package 'INLA' needed for this function to work. Please install it first, visit https://www.r-inla.org/download-install",
          call. = FALSE)
   }
 

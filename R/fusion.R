@@ -14,7 +14,7 @@ fusion <- function(data, n.latent = 1, bans = 0, pp.offset, verbose = FALSE, ...
   }
 
   if (identical(bans, 0)){
-  } else if (any(class(bans)) == "matrix"){
+  } else if (any(class(bans) == "matrix")){
     if (dim(bans)[1] == data$n_point_var + data$n_area_var + data$n_pp_var & dim(bans)[2] == n.latent){
       if (! length(unique(c(bans))) == 2 & all(c(0,1) %in% unique(c(bans)))){
         stop("bans must contain only 0s and 1s")

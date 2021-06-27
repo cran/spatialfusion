@@ -52,7 +52,7 @@ The returned value is a list consists of
 }
 
 \description{
-Fit a spatial fusion model using Stan based on the unifying framework proposed by Wang and Furrer (2019). One or more latent Gaussian process(es) is assumed to be associated with the spatial response variables.
+Fit a spatial fusion model using Stan based on the unifying framework proposed by Wang and Furrer (2021). One or more latent Gaussian process(es) is assumed to be associated with the spatial response variables.
 }
 
 \details{
@@ -62,7 +62,7 @@ NOTE: Only exponential covariance model for the latent processes is implemented.
 }
 
 \references{
-Wang, C., Furrer, R. and for the SNC Study Group (2019). Combining heterogeneous spatial datasets with process-based spatial fusion models: a unifying framework. arXiv:1906.00364 [stat.ME]
+Wang, C., Furrer, R. and for the SNC Study Group (2021). Combining heterogeneous spatial datasets with process-based spatial fusion models: A unifying framework, Computational Statistics & Data Analysis
 }
 
 \author{
