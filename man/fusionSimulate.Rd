@@ -86,11 +86,13 @@ Craig Wang
 
 \examples{
 # three responses with a single latent Gaussian process
+if (require("geoR", quietly = TRUE)) {
 dat1 <- fusionSimulate(n.point = 100, n.area = 10, n.grid = 2,
             psill = 1, phi = 1, nugget = 0, tau.sq = 0.5,
             point.beta = list(rbind(1,5)), area.beta = list(rbind(-1, 0.5)),
             distributions = c("normal","poisson"), pp.offset = 0.1,
             design.mat = matrix(c(1,1,1)))
+}
 \donttest{
 # three responses with two latent Gaussian processes
 dat2 <- fusionSimulate(n.point = 100, n.area = 10, n.grid = 2,

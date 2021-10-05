@@ -28,8 +28,8 @@ Common generic functions such as \code{fitted()}, \code{predict()}, \code{summar
 \tabular{ll}{
 Package: \tab spatialfusion\cr
 Type: \tab Package\cr
-Version: \tab 0.6-3\cr
-Date: \tab 2021-06-26\cr
+Version: \tab 0.6-4\cr
+Date: \tab 2021-10-02\cr
 License: \tab GPL (>= 3) \cr
 LazyLoad: \tab yes\cr
 }}

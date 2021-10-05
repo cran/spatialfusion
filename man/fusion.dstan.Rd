@@ -74,6 +74,7 @@ Craig Wang
 \examples{
 ## example based on simulated data
 \donttest{
+if (require("geoR", quietly = TRUE)) {
 dat <- fusionSimulate(n.point = 20, n.area = 10, n.grid = 2,
           psill = 1, phi = 1, nugget = 0, tau.sq = 0.5,
           point.beta = list(rbind(1,5)),
@@ -100,6 +101,7 @@ mod_stan <- fusion(data = dat_stan, n.latent = 1, bans = 0, pp.offset = 1,
 summary(mod_stan)
 # To kill parallel process except one (for stopping a stan call)
 # system("killall R")
+}
 }
 }
 \keyword{models}
