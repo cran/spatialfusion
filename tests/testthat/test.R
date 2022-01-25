@@ -4,61 +4,65 @@ library(testthat)
 
 
 # check simulation --------------------------------------------------------
-dat <- fusionSimulate(n.point = 50, n.area = 10, n.grid = 10, n.pred = 100,
-                      psill = 1, phi = 1, nugget = 0, tau.sq = 1,
-                      dimension = 10, domain = NULL, point.beta = list(rbind(1,5)),
-                      area.beta = list(rbind(1, 1.5)), nvar.pp = 1,
-                      distributions = c("normal","poisson"),
-                      design.mat = matrix(c(2,1,1), ncol = 1), pp.offset = 1)
 
-expect_type(dat, "list")
-expect_type(dat$data, "list")
+if (require("SDraw", quietly = TRUE)){
+  dat <- fusionSimulate(n.point = 50, n.area = 10, n.grid = 10, n.pred = 100,
+                        psill = 1, phi = 1, nugget = 0, tau.sq = 1,
+                        dimension = 10, domain = NULL, point.beta = list(rbind(1,5)),
+                        area.beta = list(rbind(1, 1.5)), nvar.pp = 1,
+                        distributions = c("normal","poisson"),
+                        design.mat = matrix(c(2,1,1), ncol = 1), pp.offset = 1)
+
+  expect_type(dat, "list")
+  expect_type(dat$data, "list")
 
 
-# design mat
-expect_error(fusionSimulate(n.point = 50, n.area = 10, n.grid = 10, n.pred = 100,
-                            psill = 1, phi = 1, nugget = 0, tau.sq = 1,
-                            n.sampling = 5, sampling.type = "random", n.neighbor = 5,
-                            dimension = 10, domain = NULL, point.beta = list(rbind(1,5)),
-                            area.beta = list(rbind(1, 1.5)), nvar.pp = 1,
-                            distributions = c("normal","poisson"),
-                            design.mat = matrix(c(2,1,1,2), ncol = 2), pp.offset = 0.1))
-# distribution
-expect_error(fusionSimulate(n.point = 50, n.area = 10, n.grid = 10, n.pred = 100,
-                            psill = 1, phi = 1, nugget = 0, tau.sq = 1,
-                            n.sampling = 5, sampling.type = "random", n.neighbor = 5,
-                            dimension = 10, domain = NULL, point.beta = list(rbind(1,5)),
-                            area.beta = list(rbind(1, 1.5)), nvar.pp = 1,
-                            distributions = c("normal","binomial"),
-                            design.mat = matrix(c(2,1,1), ncol = 1), pp.offset = 0.1))
+  # design mat
+  expect_error(fusionSimulate(n.point = 50, n.area = 10, n.grid = 10, n.pred = 100,
+                              psill = 1, phi = 1, nugget = 0, tau.sq = 1,
+                              n.sampling = 5, sampling.type = "random", n.neighbor = 5,
+                              dimension = 10, domain = NULL, point.beta = list(rbind(1,5)),
+                              area.beta = list(rbind(1, 1.5)), nvar.pp = 1,
+                              distributions = c("normal","poisson"),
+                              design.mat = matrix(c(2,1,1,2), ncol = 2), pp.offset = 0.1))
+  # distribution
+  expect_error(fusionSimulate(n.point = 50, n.area = 10, n.grid = 10, n.pred = 100,
+                              psill = 1, phi = 1, nugget = 0, tau.sq = 1,
+                              n.sampling = 5, sampling.type = "random", n.neighbor = 5,
+                              dimension = 10, domain = NULL, point.beta = list(rbind(1,5)),
+                              area.beta = list(rbind(1, 1.5)), nvar.pp = 1,
+                              distributions = c("normal","binomial"),
+                              design.mat = matrix(c(2,1,1), ncol = 1), pp.offset = 0.1))
 
-# point.beta
-expect_error(fusionSimulate(n.point = 50, n.area = 10, n.grid = 10, n.pred = 100,
-                            psill = 1, phi = 1, nugget = 0, tau.sq = 1,
-                            n.sampling = 5, sampling.type = "random", n.neighbor = 5,
-                            dimension = 10, domain = NULL, point.beta = list(rbind(1,5),rbind(2,3)),
-                            area.beta = list(rbind(1, 1.5)), nvar.pp = 1,
-                            distributions = c("normal","poisson"),
-                            design.mat = matrix(c(2,1,1), ncol = 1), pp.offset = 0.1))
+  # point.beta
+  expect_error(fusionSimulate(n.point = 50, n.area = 10, n.grid = 10, n.pred = 100,
+                              psill = 1, phi = 1, nugget = 0, tau.sq = 1,
+                              n.sampling = 5, sampling.type = "random", n.neighbor = 5,
+                              dimension = 10, domain = NULL, point.beta = list(rbind(1,5),rbind(2,3)),
+                              area.beta = list(rbind(1, 1.5)), nvar.pp = 1,
+                              distributions = c("normal","poisson"),
+                              design.mat = matrix(c(2,1,1), ncol = 1), pp.offset = 0.1))
 
-# tau.sq with distribution
-expect_error(fusionSimulate(n.point = 50, n.area = 10, n.grid = 10, n.pred = 100,
-                            psill = 1, phi = 1, nugget = 0, tau.sq = 1,
-                            n.sampling = 5, sampling.type = "random", n.neighbor = 5,
-                            dimension = 10, domain = NULL, point.beta = list(rbind(1,5)),
-                            area.beta = list(rbind(1, 1.5)), nvar.pp = 1,
-                            distributions = c("normal","normal"),
-                            design.mat = matrix(c(2,1,1), ncol = 1), pp.offset = 0.1))
+  # tau.sq with distribution
+  expect_error(fusionSimulate(n.point = 50, n.area = 10, n.grid = 10, n.pred = 100,
+                              psill = 1, phi = 1, nugget = 0, tau.sq = 1,
+                              n.sampling = 5, sampling.type = "random", n.neighbor = 5,
+                              dimension = 10, domain = NULL, point.beta = list(rbind(1,5)),
+                              area.beta = list(rbind(1, 1.5)), nvar.pp = 1,
+                              distributions = c("normal","normal"),
+                              design.mat = matrix(c(2,1,1), ncol = 1), pp.offset = 0.1))
 
-# dimension
-expect_error(fusionSimulate(n.point = 50, n.area = 10, n.grid = 10, n.pred = 100,
-                            psill = 1, phi = 1, nugget = 0, tau.sq = 1,
-                            n.sampling = 5, sampling.type = "random", n.neighbor = 5,
-                            dimension = 0, domain = NULL, point.beta = list(rbind(1,5)),
-                            area.beta = list(rbind(1, 1.5)), nvar.pp = 1,
-                            distributions = c("normal","poisson"),
-                            design.mat = matrix(c(2,1,1), ncol = 1), pp.offset = 0.1))
+  # dimension
+  expect_error(fusionSimulate(n.point = 50, n.area = 10, n.grid = 10, n.pred = 100,
+                              psill = 1, phi = 1, nugget = 0, tau.sq = 1,
+                              n.sampling = 5, sampling.type = "random", n.neighbor = 5,
+                              dimension = 0, domain = NULL, point.beta = list(rbind(1,5)),
+                              area.beta = list(rbind(1, 1.5)), nvar.pp = 1,
+                              distributions = c("normal","poisson"),
+                              design.mat = matrix(c(2,1,1), ncol = 1), pp.offset = 0.1))
 
+
+}
 
 # check data preparation --------------------------------------------------------
 

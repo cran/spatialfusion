@@ -28,14 +28,14 @@ Common generic functions such as \code{fitted()}, \code{predict()}, \code{summar
 \tabular{ll}{
 Package: \tab spatialfusion\cr
 Type: \tab Package\cr
-Version: \tab 0.6-4\cr
-Date: \tab 2021-10-02\cr
+Version: \tab 0.6-5\cr
+Date: \tab 2022-01-24\cr
 License: \tab GPL (>= 3) \cr
 LazyLoad: \tab yes\cr
 }}
 
 \author{
-Craig Wang \email{craig.wang@math.uzh.ch} \cr
+Craig Wang \email{craigwang247@gmail.com} \cr
 }
 
 \examples{

@@ -4,7 +4,7 @@ fusionSimulate <- function(n.point, n.area, n.grid, n.pred, dimension = 10,
                            distributions, design.mat = matrix(c(1,1.5,2)),
                            pp.offset, seed){
 
-  if (requireNamespace("geoR", quietly = TRUE)) {
+  if (requireNamespace("geoR", quietly = TRUE) & requireNamespace("SDraw", quietly = TRUE)) {
     # checks ------------------------------------------------------------------
 
     if (missing("n.point")) n.point <- 0
@@ -163,7 +163,7 @@ fusionSimulate <- function(n.point, n.area, n.grid, n.pred, dimension = 10,
         centroids$x[which.max(centroids$x)] <- centroids$y[which.max(centroids$y)] <- dimension
         centroids$x[which.min(centroids$x)] <- centroids$y[which.min(centroids$y)] <- 0
         coordinates(centroids) <- ~ x + y
-        poly <- suppressMessages(voronoi.polygons(centroids, domain))
+        poly <- suppressMessages(SDraw::voronoi.polygons(centroids, domain))
       } else {
         n.area <- length(domain)
         warning(paste0("n.area is set to ", n.area, " to match the number of polygons provided in 'domain'."))
@@ -211,6 +211,6 @@ fusionSimulate <- function(n.point, n.area, n.grid, n.pred, dimension = 10,
 
     return(out)
   } else {
-    stop("The 'geoR' package is not installed, please install it first to use the fusionSimulate() function.")
+    stop("Either the 'geoR' or the 'SDraw' package is not installed, please install them first to use the fusionSimulate() function.")
   }
 }

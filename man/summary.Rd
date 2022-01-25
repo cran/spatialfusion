@@ -29,7 +29,7 @@ Craig Wang
 \examples{
 ## example based on simulated data
 \dontrun{
-if (require("INLA", quietly = TRUE)) {
+if (require("INLA", quietly = TRUE) & require("SDraw", quietly = TRUE)) {
 dat <- fusionSimulate(n.point = 20, n.area = 10, n.grid = 2,
        psill = 1, phi = 1, nugget = 0, tau.sq = 0.5,
        point.beta = list(rbind(1,5)),

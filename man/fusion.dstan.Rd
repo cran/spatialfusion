@@ -41,7 +41,7 @@
 
 \item{adapt.delta}{a numeric value between 0 and 1 specifying the target acceptance rate. Default 0.95.}
 
-\item{...}{additional arguments passed to \code{\link[rstan]{sampling}} in \pkg{rstan}}
+\item{...}{additional arguments passed to \code{sampling} function in \pkg{rstan}}
 }
 
 \value{
@@ -74,7 +74,7 @@ Craig Wang
 \examples{
 ## example based on simulated data
 \donttest{
-if (require("geoR", quietly = TRUE)) {
+if (require("geoR", quietly = TRUE) & require("SDraw", quietly = TRUE)) {
 dat <- fusionSimulate(n.point = 20, n.area = 10, n.grid = 2,
           psill = 1, phi = 1, nugget = 0, tau.sq = 0.5,
           point.beta = list(rbind(1,5)),
