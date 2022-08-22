@@ -2,9 +2,9 @@
 # generic S3 method -------------------------------------------------------
 
 "fitted.fusionModel" <- function(object, type = c("link","summary","full","latent"), ...){
-  if (class(object) != "fusionModel") stop("fusion.model must be an output of either fusionStan or fusionINLA")
+  if (!inherits(object, "fusionModel")) stop("fusion.model must be an output of either fusionStan or fusionINLA")
   if (missing(type)) type <- "link"
-  if (class(object$model) == "inla"){
+  if (inherits(object$model, "inla")){
     fittedINLA(object, type = type)
   } else {
     fittedStan(object, type = type)

@@ -5,7 +5,6 @@ library(testthat)
 
 # check simulation --------------------------------------------------------
 
-if (require("SDraw", quietly = TRUE)){
   dat <- fusionSimulate(n.point = 50, n.area = 10, n.grid = 10, n.pred = 100,
                         psill = 1, phi = 1, nugget = 0, tau.sq = 1,
                         dimension = 10, domain = NULL, point.beta = list(rbind(1,5)),
@@ -62,7 +61,7 @@ if (require("SDraw", quietly = TRUE)){
                               design.mat = matrix(c(2,1,1), ncol = 1), pp.offset = 0.1))
 
 
-}
+
 
 # check data preparation --------------------------------------------------------
 

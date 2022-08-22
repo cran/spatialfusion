@@ -23,13 +23,13 @@ fusion.dstan <- function(data, n.latent = 1, bans = 0,
   if (missing(pp.offset)){
     data$offset <- matrix(rep(1, data$n_grid*data$n_pp_var), ncol = data$n_pp_var) # log(pp.offset) = 0
   } else {
-    if (class(pp.offset) == "numeric"){
+    if (inherits(pp.offset, "numeric")){
       if (length(pp.offset) == data$n_pp_var){
         data$offset <- matrix(rep(pp.offset, each = data$n_grid), ncol = data$n_pp_var)
       } else if (length(pp.offset) == data$n_grid){
         data$offset <- matrix(rep(pp.offset, data$n_pp_var), ncol = data$n_pp_var)
       } else {stop("length of pp.offset must be either 1 or equal to the number of grids in grid_lrg in data")}
-    } else if (class(pp.offset) == "matrix"){
+    } else if (inherits(pp.offset, "matrix")){
       if (nrow(pp.offset) != data$n_grid) stop("dimension of pp.offset must be either 1 or equal to the number of grids in grid_lrg in data")
     } else {
       stop("dimension of pp.offset must be of either class numeric or matrix")

@@ -34,20 +34,20 @@ fusionData <- function(geo.data, geo.formula,
   }
 
   if (!missing("geo.data")){
-    if (class(geo.data) == "data.frame"){
+    if (inherits(geo.data, "data.frame")){
       if (all(c("x","y") %in% names(geo.data))){
         geo.data <- SpatialPointsDataFrame(coords = geo.data[,c("x","y")], data = geo.data, proj4string = proj4string)
       } else {
         stop("missing x and y coordinates in the data.frame.")
       }
     } else {
-      if (class(geo.data) != "SpatialPointsDataFrame") stop("geo.data must be either a class of data.frame or SpatialPointsDataFrame")
+      if (!inherits(geo.data, "SpatialPointsDataFrame")) stop("geo.data must be either a class of data.frame or SpatialPointsDataFrame")
     }
     n.point <- nrow(geo.data)
     if (missing(geo.formula)){
       stop("geo.formula is missing for geo.data")
     } else {
-      if (class(geo.formula)!="formula") stop("geo.formula is not a valid formula")
+      if (!inherits(geo.formula, "formula")) stop("geo.formula is not a valid formula")
     }
     p.point <- length(attr(terms(geo.formula), "term.labels")) + attr(terms(geo.formula), "intercept")
     n.point.vars <- length(all.vars(geo.formula)) - length(attr(terms(geo.formula), "term.labels"))
@@ -60,14 +60,14 @@ fusionData <- function(geo.data, geo.formula,
   }
 
   if (!missing("lattice.data")){
-    if (class(lattice.data) != "SpatialPolygonsDataFrame"){
+    if (!inherits(lattice.data, "SpatialPolygonsDataFrame")){
       stop("lattice.data must be a class of SpatialPolygonsDataFrame")
     } else {
       n.area <- length(lattice.data)
       if (missing(lattice.formula)){
         stop("lattice.formula is missing for lattice.data")
       } else {
-        if (class(lattice.formula)!="formula") stop("lattice.formula is not a valid formula")
+        if (!inherits(lattice.formula, "formula")) stop("lattice.formula is not a valid formula")
       }
     }
 
@@ -104,7 +104,7 @@ fusionData <- function(geo.data, geo.formula,
             stop("missing x and y coordinates in the data.frame.")
           }
         } else {
-          if (!class(pp.data) %in% c("SpatialPoints","SpatialPointsDataFrame")) stop("pp.data must be (a list of) either data.frame, SpatialPoints or SpatialPointsDataFrame")
+          if (!inherits(pp.data, c("SpatialPoints","SpatialPointsDataFrame"))) stop("pp.data must be (a list of) either data.frame, SpatialPoints or SpatialPointsDataFrame")
         }
       }
   } else {
@@ -124,7 +124,7 @@ fusionData <- function(geo.data, geo.formula,
       stop("'domain' must be provided if there is no lattice data")
     }
   } else {
-    if (class(domain) != "SpatialPolygons") stop("'domain' must be a class of SpatialPolygons")
+    if (!inherits(domain, "SpatialPolygons")) stop("'domain' must be a class of SpatialPolygons")
     if (!missing("geo.data")){
       if (sum(is.na(over(geo.data, domain)))/length(geo.data) > 0.5) stop("majority of 'geo.data' falls outside of the 'domain', please check your data again before proceeding or provide a larger 'domain'")
     }
@@ -362,7 +362,7 @@ fusionData <- function(geo.data, geo.formula,
                    n_area_var = list(n_area_var))
     }
     if (n.grid > 0){
-      Y_pp <- if (class(lgcp.grid) == "data.frame"){
+      Y_pp <- if (inherits(lgcp.grid, "data.frame")){
         data.frame(lgcp.grid$number)
       } else {sapply(lgcp.grid, function(x) x$number)}
 

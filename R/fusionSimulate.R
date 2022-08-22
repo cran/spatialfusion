@@ -3,8 +3,6 @@ fusionSimulate <- function(n.point, n.area, n.grid, n.pred, dimension = 10,
                            domain = NULL, point.beta = NULL, area.beta = NULL, nvar.pp = 1,
                            distributions, design.mat = matrix(c(1,1.5,2)),
                            pp.offset, seed){
-
-  if (requireNamespace("geoR", quietly = TRUE) & requireNamespace("SDraw", quietly = TRUE)) {
     # checks ------------------------------------------------------------------
 
     if (missing("n.point")) n.point <- 0
@@ -29,7 +27,7 @@ fusionSimulate <- function(n.point, n.area, n.grid, n.pred, dimension = 10,
     if (!identical(length(psill), dim(design.mat)[2])) stop("number of colums of the design matrix must match the number of latent Gaussian processes.")
     if (any(rowSums(design.mat) == 0)) stop("at least one response variable is not associated with the latent process based on the design matrix, consider removing it in the simulation")
     #  if (!all.equal(length(psill), dim(design.mat)[1])) stop("Number of rows of the design matrix must match the number of dependent variables.")
-    if (!is.null(domain) & !class(domain) %in% c("SpatialPolygonsDataFrame", "SpatialPolygons")) stop("domain must be a class of SpatialPolygons or SpatialPolygonsDataFrame")
+    if (!is.null(domain) & !inherits(domain, c("SpatialPolygonsDataFrame", "SpatialPolygons"))) stop("domain must be a class of SpatialPolygons or SpatialPolygonsDataFrame")
     if (dimension <= 0) stop("dimension must be strictly positive")
 
     if (n.point != 0){
@@ -53,13 +51,16 @@ fusionSimulate <- function(n.point, n.area, n.grid, n.pred, dimension = 10,
 
     # Simulation --------------------------------------------------------------
 
+    size.latent <- 30^2
+    if (missing("n.pred")) n.pred <- size.latent
     set.seed(seed)
     if (is.null(domain)){
-      xy.latent <- data.frame(expand.grid(x = seq(0, dimension, length.out = 100), y = seq(0, dimension, length.out = 100)))
-      xy.point <- data.frame(x = runif(10000, 0, dimension), y = runif(10000, 0, dimension))
+      xy.latent <- data.frame(expand.grid(x = seq(0, dimension, length.out = sqrt(size.latent)),
+                                          y = seq(0, dimension, length.out = sqrt(size.latent))))
+      xy.point <- data.frame(x = runif(size.latent, 0, dimension), y = runif(size.latent, 0, dimension))
     } else {
-      xy.latent <- data.frame(spsample(domain, 10000, "regular")@coords)
-      xy.point <- data.frame(spsample(domain, 10000, "random")@coords)
+      xy.latent <- data.frame(spsample(domain, size.latent, "regular")@coords)
+      xy.point <- data.frame(spsample(domain, size.latent, "random")@coords)
       names(xy.latent) <- names(xy.point) <- c("x","y")
     }
 
@@ -97,7 +98,7 @@ fusionSimulate <- function(n.point, n.area, n.grid, n.pred, dimension = 10,
       domain.coords = matrix(c(0, 0, 0, dimension, dimension, dimension, dimension, 0, 0, 0), ncol = 2, byrow = TRUE)
       domain <- SpatialPolygons(list(Polygons(list(Polygon(domain.coords)), 1)))
     } else {
-      if (class(domain) != "SpatialPolygons") stop("domain must be a class of SpatialPolygons")
+      if (!inherits(domain, "SpatialPolygons")) stop("domain must be a class of SpatialPolygons")
     }
 
     if (n.grid > 0){
@@ -120,11 +121,11 @@ fusionSimulate <- function(n.point, n.area, n.grid, n.pred, dimension = 10,
     n.xy <- nrow(xy)
     for (i in 1:n.w){
       if (i == 1){
-        g.dummy <- geoR::grf(grid = xy, cov.model = "exponential", cov.pars = c(psill[i], phi[i]), nugget = nugget[i], messages = FALSE)
-        mrf <- data.frame(x = g.dummy[[1]][,1], y = g.dummy[[1]][,2], sim1 = g.dummy[["data"]])
+        g.dummy <- spam::rgrf(1, locs = xy, Covariance = "cov.exp", theta = c(phi[i], psill[i], nugget[i]))
+        mrf <- data.frame(x = xy[,1], y = xy[,2], sim1 = g.dummy)
       } else {
-        g.dummy2 <- geoR::grf(grid = xy, cov.model = "exponential", cov.pars = c(psill[i], phi[i]), nugget = nugget[i], messages = FALSE)
-        mrf[,paste0("sim",i)] <- g.dummy2[["data"]]
+        g.dummy2 <- spam::rgrf(1, locs = xy, Covariance = "cov.exp", theta = c(phi[i], psill[i], nugget[i]))
+        mrf[,paste0("sim",i)] <- g.dummy2
       }
     }
 
@@ -163,7 +164,7 @@ fusionSimulate <- function(n.point, n.area, n.grid, n.pred, dimension = 10,
         centroids$x[which.max(centroids$x)] <- centroids$y[which.max(centroids$y)] <- dimension
         centroids$x[which.min(centroids$x)] <- centroids$y[which.min(centroids$y)] <- 0
         coordinates(centroids) <- ~ x + y
-        poly <- suppressMessages(SDraw::voronoi.polygons(centroids, domain))
+        poly <- suppressMessages(voronoiPolygons(centroids, domain)) # modified original function from package SDraw (archived package)
       } else {
         n.area <- length(domain)
         warning(paste0("n.area is set to ", n.area, " to match the number of polygons provided in 'domain'."))
@@ -210,7 +211,4 @@ fusionSimulate <- function(n.point, n.area, n.grid, n.pred, dimension = 10,
     if (n.grid > 0){out <- c(out, lgcp.grid = list(xy.lgcp))}
 
     return(out)
-  } else {
-    stop("Either the 'geoR' or the 'SDraw' package is not installed, please install them first to use the fusionSimulate() function.")
-  }
 }

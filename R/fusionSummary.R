@@ -2,7 +2,7 @@
 # generic S3 method -------------------------------------------------------
 
 "summary.fusionModel" <- function(object, digits = 3, ...){
-  if (class(object$model) == "inla"){
+  if (inherits(object$model, "inla")){
     summaryINLA(object, digits)
   } else {
     summaryStan(object, digits)

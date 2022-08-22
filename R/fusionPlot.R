@@ -3,7 +3,7 @@
 
 "plot.fusionModel" <- function(x, posterior = TRUE, interactive = TRUE, ...){
   op <- par(no.readonly = TRUE)
-  if (class(x$model) == "inla"){
+  if (inherits(x$model, "inla")){
     plotINLA(x, posterior = posterior, interactive = interactive)
   } else {
     plotStan(x, posterior = posterior, interactive = interactive)

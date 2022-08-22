@@ -28,8 +28,8 @@ Common generic functions such as \code{fitted()}, \code{predict()}, \code{summar
 \tabular{ll}{
 Package: \tab spatialfusion\cr
 Type: \tab Package\cr
-Version: \tab 0.6-5\cr
-Date: \tab 2022-01-24\cr
+Version: \tab 0.6-6\cr
+Date: \tab 2022-08-14\cr
 License: \tab GPL (>= 3) \cr
 LazyLoad: \tab yes\cr
 }}
@@ -39,7 +39,7 @@ Craig Wang \email{craigwang247@gmail.com} \cr
 }
 
 \examples{
-\donttest{
+\dontrun{
 ## Citations
 citation('spatialfusion')
 

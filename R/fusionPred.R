@@ -2,19 +2,19 @@
 # generic S3 method -------------------------------------------------------
 
 "predict.fusionModel" <- function(object, new.locs, type = c("summary", "full"), ...){
-  if (class(object) != "fusionModel") stop("fusion.model must be an output of either fusionStan or fusionINLA")
+  if (!inherits(object, "fusionModel")) stop("fusion.model must be an output of either fusionStan or fusionINLA")
   if (missing(new.locs)) stop("new.locs must be supplied")
   if (missing(type)) type <- "summary"
 
-  if (class(new.locs) == "data.frame"){
+  if (inherits(new.locs, "data.frame")){
     if (!all(c("x","y") %in% names(new.locs))) stop("missing x and y coordinates in the data frame new.locs")
-  } else if (class(new.locs) %in% c("SpatialPointsDataFrame","SpatialPoints")){
+  } else if (inherits(new.locs, c("SpatialPointsDataFrame","SpatialPoints"))){
     new.locs <- new.locs@coords
   } else {
     stop("new.locs must be either a class of data.frame, SpatialPoints or SpatialPointsDataFrame")
   }
 
-  if (class(object$model) == "inla"){
+  if (inherits(object$model, "inla")){
     predictINLA(object, new.locs = new.locs, type = type)
   } else {
     predictStan(object, new.locs = new.locs, type = type)

@@ -45,14 +45,13 @@ Craig Wang
 
 \examples{
 ## example based on simulated data
-\donttest{
-if (require("geoR", quietly = TRUE)) {
-dat <- fusionSimulate(n.point = 20, n.area = 10, n.grid = 2,
+\dontrun{
+dat <- fusionSimulate(n.point = 20, n.area = 10,
           psill = 1, phi = 1, nugget = 0, tau.sq = 0.5,
           point.beta = list(rbind(1,5)),
           area.beta = list(rbind(-1, 0.5)),
           distributions = c("normal","poisson"),
-          design.mat = matrix(c(1,1,1)))
+          design.mat = matrix(c(1,1)))
 
 geo_data <- data.frame(x = dat$mrf[dat$sample.ind, "x"],
                 y = dat$mrf[dat$sample.ind, "y"],
@@ -64,14 +63,13 @@ lattice_data <- sp::SpatialPolygonsDataFrame(dat$poly,
 
 dat_stan <- fusionData(geo.data = geo_data, geo.formula = outcome ~ cov.point,
                 lattice.data = lattice_data, lattice.formula = outcome ~ cov.area,
-                pp.data = dat$data$lgcp.coords[[1]], distributions = c("normal","poisson"),
+                distributions = c("normal","poisson"),
                 method = "Stan")
 
 ## S3 method for class 'dstan'
-mod_stan <- fusion(data = dat_stan, n.latent = 1, bans = 0, pp.offset = 1,
+mod_stan <- fusion(data = dat_stan, n.latent = 1, bans = 0,
                 prior.phi = list(distr = "normal", pars = c(1, 10)))
 summary(mod_stan)
-}
 }
 \dontrun{
 if (require("INLA", quietly = TRUE)) {

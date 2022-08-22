@@ -1,6 +1,10 @@
-## spatialfusion 0.6:  
+## spatialfusion 0.6-6:
 
-* addressed INLA dependency problem
+* addressed geoR and SDraw dependency problems
+
+## spatialfusion 0.6 to 0.6-5:  
+
+* addressed INLA dependency problems
 
 * improved documentation
 
