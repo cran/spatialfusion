@@ -19,15 +19,15 @@
 
 \item{verbose}{logical. If TRUE, prints progress and debugging information.}
 
-\item{prior.pointbeta}{a list with prior information for the coeffients of geostatistical model component. The default prior is \code{list(distr = "normal",pars=c(0, 10))}, i.e. a normal distribution with mean 0 and standard devation 10.}
+\item{prior.pointbeta}{a list with prior information for the coeffients of geostatistical model component. The default prior is \code{list(distr = "normal", pars = c(0, 10))}, i.e. a normal distribution with mean 0 and standard devation 10.}
 
-\item{prior.areabeta}{a list with prior information for the coeffients of lattice model component. The default prior is \code{list(distr = "normal",pars=c(0, 10))}, i.e. a normal distribution with mean 0 and standard devation 10.}
+\item{prior.areabeta}{a list with prior information for the coeffients of lattice model component. The default prior is \code{list(distr = "normal", pars = c(0, 10))}, i.e. a normal distribution with mean 0 and standard devation 10.}
 
-\item{prior.tausq}{a list with prior information for the coeffients of geostatistical model component. The default prior is \code{list(distr = "inv_gamma",pars=c(2, 1))}, i.e. a inverse gamma distribution with shape 2 and rate 1.}
+\item{prior.tausq}{a list with prior information for the coeffients of geostatistical model component. The default prior is \code{list(distr = "inv_gamma", pars = c(2, 1))}, i.e. a inverse gamma distribution with shape 2 and rate 1.}
 
 \item{prior.phi}{a list with prior information for the spatial range parameter. NO default prior is available. We recomend using a moderately informative normal prior.}
 
-\item{prior.z}{a list with prior information for the design matrix, which also controls the partial sill. The default prior is \code{list(distr = "normal",pars=c(1, 1))}, i.e. a normal distribution with mean 1 and standard devation 1.}
+\item{prior.z}{a list with prior information for the design matrix, which also controls the partial sill. The default prior is \code{list(distr = "normal", pars = c(1, 1))}, i.e. a normal distribution with mean 1 and standard devation 1.}
 
 \item{nsamples}{a positive integer specifying the number of samples for each chain (including burn-in samples). Default 2000.}
 
@@ -47,7 +47,7 @@
 \value{
 The returned value is a list consists of
 
-\item{model}{an object of S4 class \code{\linkS4class{stanfit}} representing the fitted Stan model}
+\item{model}{an object of S4 class \code{stanfit} representing the fitted Stan model}
 \item{data}{the data structure used to fit the model}
 }
 
@@ -56,13 +56,13 @@ Fit a spatial fusion model using Stan based on the unifying framework proposed b
 }
 
 \details{
-In the model parameterization, \code{beta} are fixed-effect coefficients, \code{phi} is the range parameter, \code{Z_ij} is the ith row and j column of the design matrix for latent processes and \code{tau_sq} is the variance parameter of a normal distribution.
+In the model parameterization, \code{beta} are fixed-effect coefficients, \code{phi} is the range parameter, \code{Z_ij} is the ith row and j column of the design matrix for latent processes and \code{tau_sq} is the variance parameter of a normal distribution.}
 
-NOTE: Only exponential covariance model for the latent processes is implemented. However, it can be easily extended by modifying the model code from the output.
-}
+\note{Only exponential covariance model for the latent processes is implemented. However, it can be easily extended by modifying the model code from the output.}
+
 
 \references{
-Wang, C., Furrer, R. and for the SNC Study Group (2021). Combining heterogeneous spatial datasets with process-based spatial fusion models: A unifying framework, Computational Statistics & Data Analysis
+Wang, C., Furrer, R. and for the SNC Study Group (2021). Combining heterogeneous spatial datasets with process-based spatial fusion models: A unifying framework. \emph{Computational Statistics & Data Analysis}, 161, 107240.
 }
 
 \author{
@@ -73,7 +73,7 @@ Craig Wang
 
 \examples{
 ## example based on simulated data
-\dontrun{
+\donttest{
 dat <- fusionSimulate(n.point = 20, n.area = 10,
           psill = 1, phi = 1, nugget = 0, tau.sq = 0.5,
           point.beta = list(rbind(1,5)),
@@ -85,7 +85,8 @@ geo_data <- data.frame(x = dat$mrf[dat$sample.ind, "x"],
                 y = dat$mrf[dat$sample.ind, "y"],
                 cov.point = dat$data$X_point[,2],
                 outcome = dat$data$Y_point[[1]])
-lattice_data <- sp::SpatialPolygonsDataFrame(dat$poly,
+
+lattice_data <- cbind(dat$poly,
                     data.frame(outcome = dat$data$Y_area[[1]],
                     cov.area = dat$data$X_area[,2]))
 
@@ -96,10 +97,9 @@ dat_stan <- fusionData(geo.data = geo_data, geo.formula = outcome ~ cov.point,
 
 ## S3 method for class 'dstan'
 mod_stan <- fusion(data = dat_stan, n.latent = 1, bans = 0,
-                prior.phi = list(distr = "normal", pars = c(1, 10)))
+                prior.phi = list(distr = "normal", pars = c(1, 10)),
+                nsamples = 1000, nburnin = 500, nchain = 1, ncore = 1)
 summary(mod_stan)
-# To kill parallel process except one (for stopping a stan call)
-# system("killall R")
 }
 }
 \keyword{models}

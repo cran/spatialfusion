@@ -12,19 +12,19 @@ fusionData(geo.data, geo.formula,
            stan.control = NULL)
 }
 \arguments{
-\item{geo.data}{an object of class \code{\link[base]{data.frame}} or \code{SpatialPointsDataFrame}. If \code{data.frame}, it must have column names "x" and "y" as coordinates of observations.}
+\item{geo.data}{an object of class \code{\link[base]{data.frame}} or \code{sf}. If \code{data.frame}, it must have column names "x" and "y" as coordinates of observations.}
 
 \item{geo.formula}{an object of class \code{\link[stats]{formula}}. A symbolic description of the model to be fitted for geostatistical data. For multivariate geostatistical data, use syntax \code{cbind(y1, y2)} followed by \code{~}.}
 
-\item{lattice.data}{an object of class \code{SpatialPolygonsDataFrame}. Contains lattice data.}
+\item{lattice.data}{an object of class \code{sf}. Contains lattice data.}
 
 \item{lattice.formula}{an object of class \code{\link[stats]{formula}}. A symbolic description of the model to be fitted for lattice data. For multivariate lattice data, use syntax \code{cbind(y1, y2)} followed by \code{~}.}
 
-\item{pp.data}{an object of class \code{\link[base]{data.frame}}, \code{SpatialPoints} or \code{SpatialPointsDataFrame}, or a list of them. If \code{data.frame}, it must have column names "x" and "y" as coordinates.}
+\item{pp.data}{an object of class \code{\link[base]{data.frame}} or \code{sf}, or a list of them. If \code{data.frame}, it must have column names "x" and "y" as coordinates.}
 
 \item{distributions}{a vector of strings. Specifying the distributions of each geostatistical and lattice response variable, currently \dQuote{Gaussian} or \dQuote{normal}, \dQuote{Poisson} (count) and \dQuote{Bernoulli} (binary) are supported. Note: no distribution is required to be specified for point pattern data.}
 
-\item{domain}{an object of class \code{SpatialPolygons}. The spatial domain considered for computing gridded point pattern data. If \code{NULL}, a bounding box that contains all spatial units is used.}
+\item{domain}{an object of class \code{sf}. The spatial domain considered for computing gridded point pattern data. If \code{NULL}, a bounding box that contains all spatial units is used.}
 
 \item{method}{character. Either 'Stan' or 'INLA', the method to be used for fitting the spatial fusion model later.}
 
@@ -116,8 +116,9 @@ dat <- fusionData(dataGeo, lungfunction ~ covariate,
            dataPP, distribution = c("normal","poisson"),
            domain = dataDomain,
            method = "INLA")
-\dontrun{
-if (require("INLA", quietly = TRUE)) {
+
+\donttest{
+if (requireNamespace("INLA", quietly = TRUE)) {
 ## fit a spatial fusion model on the prepared data
 ## pp.offset = 400 was chosen based on simulation parameters
 mod <- fusion(data = dat, n.latent = 1, bans = 0, pp.offset = 400,

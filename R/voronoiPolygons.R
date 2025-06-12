@@ -29,9 +29,10 @@ voronoiPolygons <- function (x, bounding.polygon = NULL){
                                                                                                      slot, "area"), row.names = sapply(slot(SP, "polygons"),
                                                                                                                                        slot, "ID")))
   # if (!is.null(bounding.polygon)) {
-    bounding.polygon <- gUnion(bounding.polygon, bounding.polygon)
-    voronoi.clipped <- gIntersection(voronoi, bounding.polygon,
-                                     byid = TRUE, id = row.names(voronoi))
+    bounding.polygon <- st_union(st_as_sf(bounding.polygon))
+    voronoi.clipped <- as_Spatial(st_intersection(st_as_sf(voronoi), bounding.polygon,
+                                     by_feature = TRUE))
+
     df <- data.frame(voronoi)
     df$area <- sapply(slot(voronoi.clipped, "polygons"),
                       slot, "area")

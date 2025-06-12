@@ -33,7 +33,7 @@ It is not possible to add covariates for point pattern data. However, an offset 
 }
 
 \references{
-Wang, C., Furrer, R. and for the SNC Study Group (2021). Combining heterogeneous spatial datasets with process-based spatial fusion models: A unifying framework, Computational Statistics & Data Analysis
+Wang, C., Furrer, R. and for the SNC Study Group (2021). Combining heterogeneous spatial datasets with process-based spatial fusion models: A unifying framework. \emph{Computational Statistics & Data Analysis}, 161, 107240.
 }
 
 \author{
@@ -45,7 +45,7 @@ Craig Wang
 
 \examples{
 ## example based on simulated data
-\dontrun{
+\donttest{
 dat <- fusionSimulate(n.point = 20, n.area = 10,
           psill = 1, phi = 1, nugget = 0, tau.sq = 0.5,
           point.beta = list(rbind(1,5)),
@@ -57,9 +57,10 @@ geo_data <- data.frame(x = dat$mrf[dat$sample.ind, "x"],
                 y = dat$mrf[dat$sample.ind, "y"],
                 cov.point = dat$data$X_point[,2],
                 outcome = dat$data$Y_point[[1]])
-lattice_data <- sp::SpatialPolygonsDataFrame(dat$poly,
-                    data.frame(outcome = dat$data$Y_area[[1]],
-                    cov.area = dat$data$X_area[,2]))
+
+lattice_data <- cbind(dat$poly,
+                     data.frame(outcome = dat$data$Y_area[[1]],
+                     cov.area = dat$data$X_area[,2]))
 
 dat_stan <- fusionData(geo.data = geo_data, geo.formula = outcome ~ cov.point,
                 lattice.data = lattice_data, lattice.formula = outcome ~ cov.area,
@@ -68,15 +69,34 @@ dat_stan <- fusionData(geo.data = geo_data, geo.formula = outcome ~ cov.point,
 
 ## S3 method for class 'dstan'
 mod_stan <- fusion(data = dat_stan, n.latent = 1, bans = 0,
-                prior.phi = list(distr = "normal", pars = c(1, 10)))
+                prior.phi = list(distr = "normal", pars = c(1, 10)),
+                nsamples = 1000, nburnin = 500, nchain = 1, ncore = 1)
 summary(mod_stan)
 }
-\dontrun{
-if (require("INLA", quietly = TRUE)) {
+
+\donttest{
+if (requireNamespace("INLA", quietly = TRUE)) {
+dat <- fusionSimulate(n.point = 20, n.area = 10, n.grid = 10, n.pred =15,
+          psill = 1, phi = 1, nugget = 0, tau.sq = 0.5,
+          point.beta = list(rbind(1,5)),
+          area.beta = list(rbind(-1, 0.5)), nvar.pp = 1,
+          distributions = c("normal","poisson"),
+          design.mat = matrix(c(1,1,1), ncol=1), pp.offset = 1)
+
+geo_data <- data.frame(x = dat$mrf[dat$sample.ind, "x"],
+                y = dat$mrf[dat$sample.ind, "y"],
+                cov.point = dat$data$X_point[,2],
+                outcome = dat$data$Y_point[[1]])
+
+lattice_data <- cbind(dat$poly,
+                     data.frame(outcome = dat$data$Y_area[[1]],
+                     cov.area = dat$data$X_area[,2]))
+
 dat_inla <- fusionData(geo.data = geo_data, geo.formula = outcome ~ cov.point,
                 lattice.data = lattice_data, lattice.formula = outcome ~ cov.area,
                 pp.data = dat$data$lgcp.coords[[1]], distributions = c("normal","poisson"),
                 method = "INLA")
+
 
 ## S3 method for class 'dinla'
 mod_inla <- fusion(data = dat_inla, n.latent = 1, bans = 0,
@@ -84,6 +104,7 @@ mod_inla <- fusion(data = dat_inla, n.latent = 1, bans = 0,
                 mesh.locs = dat_inla$locs_point, mesh.max.edge = c(0.5, 1))
 summary(mod_inla)
 }
-}}
+}
+}
 \keyword{models}
 

@@ -1,4 +1,3 @@
-
 # generic S3 method -------------------------------------------------------
 
 "predict.fusionModel" <- function(object, new.locs, type = c("summary", "full"), ...){
@@ -6,12 +5,14 @@
   if (missing(new.locs)) stop("new.locs must be supplied")
   if (missing(type)) type <- "summary"
 
-  if (inherits(new.locs, "data.frame")){
+  if (class(new.locs)[1] == "data.frame"){
     if (!all(c("x","y") %in% names(new.locs))) stop("missing x and y coordinates in the data frame new.locs")
-  } else if (inherits(new.locs, c("SpatialPointsDataFrame","SpatialPoints"))){
+  } else if (inherits(new.locs, "sf")){
+    new.locs <- as(new.locs, "Spatial")
     new.locs <- new.locs@coords
+    colnames(new.locs) <- c("x","y")
   } else {
-    stop("new.locs must be either a class of data.frame, SpatialPoints or SpatialPointsDataFrame")
+    stop("new.locs must be of class data.frame or sf")
   }
 
   if (inherits(object$model, "inla")){
@@ -20,7 +21,6 @@
     predictStan(object, new.locs = new.locs, type = type)
   }
 }
-
 # INLA model prediction ----------------------------------------------------------
 
 predictINLA <- function(fusion.model, new.locs, type){
@@ -37,16 +37,20 @@ predictINLA <- function(fusion.model, new.locs, type){
          "summary" = {
            latent <- lapply(1:length(model$summary.random),
                             function(i) INLA::inla.mesh.project(INLA::inla.mesh.projector(fusion.model$mesh, loc = as.matrix(new.locs)),
-                                                          model$summary.random[[i]]$`0.5quant`))
+                                                                model$summary.random[[i]]$`0.5quant`))
          },
          "full" = {
            latent <- lapply(1:length(model$summary.random),
                             function(i) INLA::inla.mesh.project(INLA::inla.mesh.projector(fusion.model$mesh, loc = as.matrix(new.locs)),
-                                                          model$summary.random[[i]]))
+                                                                model$summary.random[[i]]))
          },
          stop("type must be one of c(summary, full)"))
   names(latent) <- paste0("latent.", names(model$summary.random))
-  return(latent)
+  latent <- as.data.frame(latent)
+  latent$x <- new.locs[,1]
+  latent$y <- new.locs[,2]
+  result <- st_as_sf(latent, coords =c("x", "y"))
+  return(result)
 }
 
 # Stan model prediction ----------------------------------------------------------
@@ -116,8 +120,8 @@ predictStan <- function(fusion.model, new.locs, type){
   if (data$n_area_var > 0){
     fit.samples.wa <- rstan::extract(model, pars = "wa")$wa
     if (data$n_point_var + data$n_pp_var > 0){
-    fit.samples.ws <- array(c(fit.samples.ws, fit.samples.wa),
-                            dim = c(dim(fit.samples.ws)[1:2], dim(fit.samples.ws)[3] + dim(fit.samples.wa)[3]))
+      fit.samples.ws <- array(c(fit.samples.ws, fit.samples.wa),
+                              dim = c(dim(fit.samples.ws)[1:2], dim(fit.samples.ws)[3] + dim(fit.samples.wa)[3]))
     } else {
       fit.samples.ws <- fit.samples.wa
     }
@@ -142,6 +146,9 @@ predictStan <- function(fusion.model, new.locs, type){
          },
          stop("type must be one of c(summary, full)"))
   names(latent) <- paste0("latent", 1:n.latent)
+  latent <- as.data.frame(latent)
+  latent$x <- new.locs[,1]
+  latent$y <- new.locs[,2]
+  result <- st_as_sf(latent, coords =c("x", "y"))
   return(latent)
 }
-

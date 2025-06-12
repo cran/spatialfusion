@@ -16,6 +16,8 @@
 \item{...}{additional arguments not used}
 }
 
+\value{No return value, called for side effects}
+
 \description{
 Plot model diagnostics for \code{fusionModel} objects.  By default, it shows posterior versus prior distributions of fixed effect coefficients and latent parameters. The names of fixed effect coefficients are covariate names followed by internal parameter names in parentheses. 'beta_p' denotes the coefficients for point data and 'beta_a' denotes the coefficients for lattice data.
 }
@@ -30,8 +32,8 @@ Craig Wang
 
 \examples{
 ## example based on simulated data
-\dontrun{
-if (require("INLA", quietly = TRUE)) {
+\donttest{
+if (requireNamespace("INLA", quietly = TRUE)) {
 dat <- fusionSimulate(n.point = 20, n.area = 10, n.grid = 2,
                psill = 1, phi = 1, nugget = 0, tau.sq = 0.5,
                point.beta = list(rbind(1,5)),
@@ -43,9 +45,10 @@ geo_data <- data.frame(x = dat$mrf[dat$sample.ind, "x"],
                        y = dat$mrf[dat$sample.ind, "y"],
                        cov.point = dat$data$X_point[,2],
                        outcome = dat$data$Y_point[[1]])
-lattice_data <- sp::SpatialPolygonsDataFrame(dat$poly,
-                data.frame(outcome = dat$data$Y_area[[1]],
-                cov.area = dat$data$X_area[,2]))
+lattice_data <- cbind(dat$poly,
+                     data.frame(outcome = dat$data$Y_area[[1]],
+                    cov.area = dat$data$X_area[,2]))
+
 
 dat_inla <- fusionData(geo.data = geo_data, geo.formula = outcome ~ cov.point,
                    lattice.data = lattice_data, lattice.formula = outcome ~ cov.area,

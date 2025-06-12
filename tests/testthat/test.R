@@ -67,9 +67,11 @@ library(testthat)
 
 geo.data <- data.frame(x = dat$mrf[dat$sample.ind, "x"], y = dat$mrf[dat$sample.ind, "y"],
                        cov.point = dat$data$X_point[,2], outcome = dat$data$Y_point[[1]])
-lattice.data <- SpatialPolygonsDataFrame(dat$poly, data.frame(outcome = dat$data$Y_area[[1]],
-                                                              cov.area = dat$data$X_area[,2]))
-pp.data <- dat$data$lgcp.coords[[1]]
+
+lattice.data <-cbind(dat$poly,
+                       data.frame(outcome = dat$data$Y_area[[1]],
+                                  cov.area = dat$data$X_area[,2]))
+pp.data <-dat$data$lgcp.coords[[1]]
 expect_s3_class(fusionData(geo.data = geo.data, geo.formula = outcome ~ cov.point, lattice.data = lattice.data, lattice.formula = outcome ~ cov.area,
                    pp.data = pp.data, distributions = c("normal", "poisson"), method = "INLA"), "dinla")
 

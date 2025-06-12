@@ -6,7 +6,7 @@
 This dataset gives the municipality (gemeinde) map for the Canton of Zurich in Switzerland as of 2019, consisting of 162 municipalities.
 }
 \usage{dataDomain}
-\format{A \code{SpatialPolygons} object containing 162 \code{Polygons}.}
+\format{An \code{sf} data frame containing 162 \code{Polygons}.}
 \references{
 \href{https://www.zh.ch/de/politik-staat/statistik-daten/datenkatalog.html#/details/151@statistisches-amt-kanton-zuerich}{https://www.zh.ch/de/politik-staat/statistik-daten.html} (Visited: 26/06/2021)
 }

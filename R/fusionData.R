@@ -6,7 +6,6 @@ fusionData <- function(geo.data, geo.formula,
                        stan.control = NULL){
 
   # some checks -------------------------------------------------------------
-
   method <- match.arg(method, choices = c("Stan", "INLA"))
   if (!method %in% c("Stan", "INLA")) stop("method must be one of 'Stan' or 'INLA'")
 
@@ -34,14 +33,18 @@ fusionData <- function(geo.data, geo.formula,
   }
 
   if (!missing("geo.data")){
-    if (inherits(geo.data, "data.frame")){
+    if (class(geo.data)[1] == "data.frame"){
       if (all(c("x","y") %in% names(geo.data))){
         geo.data <- SpatialPointsDataFrame(coords = geo.data[,c("x","y")], data = geo.data, proj4string = proj4string)
       } else {
         stop("missing x and y coordinates in the data.frame.")
       }
     } else {
-      if (!inherits(geo.data, "SpatialPointsDataFrame")) stop("geo.data must be either a class of data.frame or SpatialPointsDataFrame")
+      if (!inherits(geo.data, c("data.frame","sf"))) stop("geo.data must be either a class of data.frame or sf")
+      if (inherits(geo.data,"sf")) {
+        geo.data <- as(geo.data, "Spatial")
+        colnames(geo.data@coords) <- c("x","y")
+      }
     }
     n.point <- nrow(geo.data)
     if (missing(geo.formula)){
@@ -60,9 +63,10 @@ fusionData <- function(geo.data, geo.formula,
   }
 
   if (!missing("lattice.data")){
-    if (!inherits(lattice.data, "SpatialPolygonsDataFrame")){
-      stop("lattice.data must be a class of SpatialPolygonsDataFrame")
+    if (!inherits(lattice.data, "sf")){
+      stop("lattice.data must be of class sf")
     } else {
+      lattice.data <- as(lattice.data,"Spatial")
       n.area <- length(lattice.data)
       if (missing(lattice.formula)){
         stop("lattice.formula is missing for lattice.data")
@@ -94,17 +98,24 @@ fusionData <- function(geo.data, geo.formula,
           }
         })
       } else {
-        if (!all(sapply(pp.data, class) %in% c("SpatialPoints","SpatialPointsDataFrame"))) stop("pp.data must be (a list of) either data.frame, SpatialPoints or SpatialPointsDataFrame")
+        if (!all(sapply(pp.data, class) == "sf")) stop("pp.data must be (a list of) either data.frame or sf object")
+        if (all(sapply(pp.data, class) == "sf")) {
+          pp.data <- lapply(pp.data, function(pp){as(pp, "Spatial"); colnames(pp@coords) <- c("x","y")})
+        }
       }} else {
         n_pp_var <- 1 # number of point pattern-variate
-        if (inherits(pp.data, "data.frame")){
+        if (!inherits(pp.data,"sf") & !inherits(pp.data,"data.frame")) stop("pp.data must be (a list of) either data.frame or sf object")
+        if (!inherits(pp.data, "sf")){
           if (all(c("x","y") %in% names(pp.data))){
             pp.data <- SpatialPoints(coords = pp.data[,c("x","y")], proj4string = proj4string)
           } else {
             stop("missing x and y coordinates in the data.frame.")
           }
         } else {
-          if (!inherits(pp.data, c("SpatialPoints","SpatialPointsDataFrame"))) stop("pp.data must be (a list of) either data.frame, SpatialPoints or SpatialPointsDataFrame")
+          if (inherits(pp.data, "sf")) {
+            pp.data <- as(pp.data, "Spatial")
+            colnames(pp.data@coords) <- c("x","y")
+          }
         }
       }
   } else {
@@ -124,7 +135,10 @@ fusionData <- function(geo.data, geo.formula,
       stop("'domain' must be provided if there is no lattice data")
     }
   } else {
-    if (!inherits(domain, "SpatialPolygons")) stop("'domain' must be a class of SpatialPolygons")
+    if (!inherits(domain, "sf")) {
+      stop("'domain' must be a class of sf")
+    } else {
+      domain <- as(domain,"Spatial")          }
     if (!missing("geo.data")){
       if (sum(is.na(over(geo.data, domain)))/length(geo.data) > 0.5) stop("majority of 'geo.data' falls outside of the 'domain', please check your data again before proceeding or provide a larger 'domain'")
     }

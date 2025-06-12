@@ -1,3 +1,13 @@
+## spatialfusion 0.7:
+
+* replaced rgeos
+
+* change from sp to sf front end
+
+* debugging INLA examples
+
+* created pages
+
 ## spatialfusion 0.6-6:
 
 * addressed geoR and SDraw dependency problems

@@ -8,7 +8,7 @@
 \arguments{
 \item{object}{an object of class \code{fusionModel}. Output of \code{\link{fusion}()}.}
 
-\item{new.locs}{data.frame, SpatialPoints or SpatialPointsDataFrame. Contains the locations where the latent process(es) will be predicted. If \code{data.frame}, it must have column names "x" and "y" as coordinates of observations.}
+\item{new.locs}{of class \code{data.frame} or \code{sf}. Contains the locations where the latent process(es) will be predicted. If \code{data.frame}, it must have column names "x" and "y" as coordinates of observations.}
 
 \item{type}{string, The default "summary" gives posterior median of latent process(es); "full" gives full marginals (for INLA) or posterior samples (for Stan) of latent process(es).}
 
@@ -16,7 +16,7 @@
 }
 
 \value{
-The returned value is a list containing the posterior values for the latent spatial components.
+The returned value is an object of class \code{sf} containing the posterior values for the latent spatial components and the prediction location in the geometry column of type \code{POINTS}.
 
 For INLA models, the output represents the latent components that are associated with each response variable multiplied by the design matrix Z. They are indexed with \code{ij}, where \code{i} denotes the ith latent process and \code{j} denotes the jth variable. The variables are ordered by geostatistical, lattice, point pattern data.
 
@@ -34,8 +34,8 @@ Craig Wang
 
 \examples{
 ## example based on simulated data
-\dontrun{
-if (require("INLA", quietly = TRUE)) {
+\donttest{
+if (requireNamespace("INLA", quietly = TRUE)) {
 dat <- fusionSimulate(n.point = 20, n.area = 10, n.grid = 2,
           psill = 1, phi = 1, nugget = 0, tau.sq = 0.5,
           point.beta = list(rbind(1,5)),
@@ -47,9 +47,10 @@ geo_data <- data.frame(x = dat$mrf[dat$sample.ind, "x"],
                 y = dat$mrf[dat$sample.ind, "y"],
                 cov.point = dat$data$X_point[,2],
                 outcome = dat$data$Y_point[[1]])
-lattice_data <- sp::SpatialPolygonsDataFrame(dat$poly,
-                    data.frame(outcome = dat$data$Y_area[[1]],
-                    cov.area = dat$data$X_area[,2]))
+
+lattice_data <- cbind(dat$poly,
+                     data.frame(outcome = dat$data$Y_area[[1]],
+                     cov.area = dat$data$X_area[,2]))
 
 dat_inla <- fusionData(geo.data = geo_data, geo.formula = outcome ~ cov.point,
                 lattice.data = lattice_data, lattice.formula = outcome ~ cov.area,

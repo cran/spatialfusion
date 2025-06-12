@@ -20,7 +20,7 @@ fusionSimulate(n.point, n.area, n.grid, n.pred, dimension = 10,
 
 \item{dimension}{positive integer. Dimension of the square spatial domain.}
 
-\item{domain}{an object of class \code{SpatialPolygons} or \code{SpatialPolygonsDataFrame}. The spatial domain considered for the simulation. If NULL, a square domain with length \code{dimension} is used.}
+\item{domain}{an object of class \code{sf}. The spatial domain considered for the simulation. If NULL, a square domain with length \code{dimension} is used.}
 
 \item{psill}{positive numeric or numeric vector. Partial sill parameter(s) of the latent Gaussian process(es).}
 
@@ -51,7 +51,7 @@ The returned value is a list that consists of:
 
 \item{mrf}{a data.frame of locations and the latent Gaussian process.}
 
-\item{domain}{a SpatialPolygons for the whole domain.}
+\item{domain}{an object of class \code{sf}  describing the whole domain.}
 
 \item{pred.loc}{a data.frame of locations for prediction.}
 
@@ -61,7 +61,7 @@ The returned value is a list that consists of:
 
 \item{mean.w}{a list of aggregated latent process for each area. (only if there is lattice data)}
 
-\item{poly}{a SpatialPolygonDataFrame for the lattice data. (only if there is lattice data)}
+\item{poly}{an object of class \code{sf} for the lattice data. (only if there is lattice data)}
 
 \item{lgcp.grid}{a data.frame containing the centroids of gridded cells for point pattern data and the corresponding event counts. (only if there is point pattern data)}
 }
@@ -86,7 +86,7 @@ Craig Wang
 
 \examples{
 # three responses with a single latent Gaussian process
-dat1 <- fusionSimulate(n.point = 100, n.area = 10, n.grid = 2,
+dat1 <- fusionSimulate(n.point = 50, n.area = 5, n.grid = 2,
             psill = 1, phi = 1, nugget = 0, tau.sq = 0.5,
             point.beta = list(rbind(1,5)), area.beta = list(rbind(-1, 0.5)),
             distributions = c("normal","poisson"), pp.offset = 1,
@@ -94,7 +94,7 @@ dat1 <- fusionSimulate(n.point = 100, n.area = 10, n.grid = 2,
 
 \donttest{
 # three responses with two latent Gaussian processes
-dat2 <- fusionSimulate(n.point = 100, n.area = 10, n.grid = 2,
+dat2 <- fusionSimulate(n.point = 50, n.area = 5, n.grid = 2,
                psill = c(1,2), phi = c(2,1), nugget = c(0,0), tau.sq = 1,
                point.beta = list(rbind(1,5)), area.beta = list(rbind(-1, 0.5)),
                distributions = c("normal","poisson"), pp.offset = 0.1,
