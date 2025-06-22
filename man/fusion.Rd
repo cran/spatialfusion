@@ -101,7 +101,8 @@ dat_inla <- fusionData(geo.data = geo_data, geo.formula = outcome ~ cov.point,
 ## S3 method for class 'dinla'
 mod_inla <- fusion(data = dat_inla, n.latent = 1, bans = 0,
                 prior.range = c(1, 0.5), prior.sigma = c(1, 0.5),
-                mesh.locs = dat_inla$locs_point, mesh.max.edge = c(0.5, 1))
+                mesh.locs = dat_inla$locs_point, mesh.max.edge = c(0.5, 1),
+                inla.args = list(num.threads = "2:1"))
 summary(mod_inla)
 }
 }

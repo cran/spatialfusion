@@ -42,7 +42,7 @@ if (require(INLA)){
 mod <- fusion(data = dat, n.latent = 1, bans = matrix(c(0,0,0), ncol = 1),
               pp.offset = 400, prior.range = c(0.1, 0.5),
               prior.sigma = c(1, 0.5),  mesh.locs = dat$locs_point,
-              mesh.max.edge = c(0.05, 0.5))
+              mesh.max.edge = c(0.05, 0.5), inla.args = list(num.threads = "2:1"))
 }
 
 ## ----fig.width = 8, fig.height = 5--------------------------------------------

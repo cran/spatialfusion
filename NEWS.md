@@ -1,3 +1,7 @@
+## spatialfusion 0.7-1:
+
+* improve documentation, changing default INLA computation parameters
+
 ## spatialfusion 0.7:
 
 * replaced rgeos
