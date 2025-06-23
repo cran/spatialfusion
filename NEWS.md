@@ -1,6 +1,6 @@
-## spatialfusion 0.7-1:
+## spatialfusion 0.7-2:
 
-* improve documentation, changing default INLA computation parameters
+* improve documentation and update computation parameters in examples
 
 ## spatialfusion 0.7:
 

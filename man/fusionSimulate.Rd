@@ -85,6 +85,7 @@ Craig Wang
 }
 
 \examples{
+\dontshow{Sys.setenv("OMP_THREAD_LIMIT" = 2)}
 # three responses with a single latent Gaussian process
 dat1 <- fusionSimulate(n.point = 50, n.area = 5, n.grid = 2,
             psill = 1, phi = 1, nugget = 0, tau.sq = 0.5,

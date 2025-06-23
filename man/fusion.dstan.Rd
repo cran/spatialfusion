@@ -72,6 +72,7 @@ Craig Wang
 \seealso{\code{\link{fusion.dinla}}, \code{\link{fusion.dstan}}, \code{\link{fusionData}} for preparing data, \code{\link{fitted.fusionModel}} for extracting fitted values, \code{\link{predict.fusionModel}} for prediction.}
 
 \examples{
+\dontshow{Sys.setenv("OMP_THREAD_LIMIT" = 2)}
 ## example based on simulated data
 \donttest{
 dat <- fusionSimulate(n.point = 20, n.area = 10,

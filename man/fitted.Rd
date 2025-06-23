@@ -36,6 +36,7 @@ Craig Wang
 ## example based on simulated data
 \donttest{
 if (requireNamespace("INLA", quietly = TRUE)) {
+\dontshow{Sys.setenv("OMP_THREAD_LIMIT" = 2)}
 dat <- fusionSimulate(n.point = 20, n.area = 10, n.grid = 2,
           psill = 1, phi = 1, nugget = 0, tau.sq = 0.5,
           point.beta = list(rbind(1,5)),
@@ -60,8 +61,7 @@ dat_inla <- fusionData(geo.data = geo_data, geo.formula = outcome ~ cov.point,
 
 mod_inla <- fusion(data = dat_inla, n.latent = 1, bans = 0,
                 prior.range = c(1, 0.5), prior.sigma = c(1, 0.5),
-                mesh.locs = dat_inla$locs_point, mesh.max.edge = c(0.5, 1),
-                inla.args = list(num.threads = "2:1"))
+                mesh.locs = dat_inla$locs_point, mesh.max.edge = c(0.5, 1))
 
 fit_inla <- fitted(mod_inla, type = "summary")
 }
